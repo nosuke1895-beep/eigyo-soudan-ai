@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>営業相談AI — 営業をもっと楽しく、カンタンに。</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #FAFAF8;
+  --bg-secondary: #F3F2EE;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F9F8F5;
+  --accent: #5B7FE8;
+  --accent-light: #E8EDFB;
+  --accent-glow: rgba(91, 127, 232, 0.08);
+  --accent-green: #5CB589;
+  --accent-green-light: #E8F5EE;
+  --accent-amber: #D4A23A;
+  --accent-amber-light: #FBF3E0;
+  --accent-rose: #D67B7B;
+  --accent-rose-light: #FAEAEA;
+  --accent-purple: #9B7FD4;
+  --accent-purple-light: #F0ECF8;
+  --text-primary: #2C2C35;
+  --text-secondary: #6B6B78;
+  --text-muted: #A0A0AD;
+  --border: rgba(0, 0, 0, 0.06);
+  --border-accent: rgba(91, 127, 232, 0.15);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.05), 0 2px 6px rgba(0,0,0,0.03);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.03);
+  --font-jp: 'Noto Sans JP', sans-serif;
+  --font-en: 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius: 14px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-jp);
+  line-height: 1.8;
+  overflow-x: hidden;
+}
+
+/* ===== NAVIGATION ===== */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 1rem 2rem;
+  backdrop-filter: blur(20px);
+  background: rgba(250, 250, 248, 0.85);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo {
+  font-family: var(--font-jp);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-logo-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--accent), #7B9BF0);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.4rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  font-family: var(--font-jp);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.nav-cta:hover {
+  background: #4A6ED6;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(91, 127, 232, 0.25);
+}
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 7rem 2rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1000px;
+  height: 1000px;
+  background: radial-gradient(circle, rgba(91, 127, 232, 0.06) 0%, rgba(155, 127, 212, 0.03) 40%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 15%;
+  right: 10%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(92, 181, 137, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1.1rem;
+  background: var(--accent-light);
+  border: 1px solid var(--border-accent);
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--accent);
+  margin-bottom: 2.5rem;
+  animation: fadeInDown 0.8s ease;
+}
+
+.hero-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse-dot 2s ease infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.hero h1 {
+  font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+  font-weight: 900;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.8s ease 0.1s both;
+}
+
+.hero h1 .highlight {
+  background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+  color: var(--text-secondary);
+  max-width: 580px;
+  line-height: 2;
+  margin-bottom: 3rem;
+  font-weight: 300;
+  animation: fadeInUp 0.8s ease 0.2s both;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeInUp 0.8s ease 0.3s both;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--font-jp);
+  font-size: 0.92rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background: #4A6ED6;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(91, 127, 232, 0.25);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: var(--font-jp);
+  font-size: 0.92rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:hover {
+  border-color: rgba(0,0,0,0.1);
+  background: var(--bg-secondary);
+}
+
+/* ===== SECTIONS ===== */
+.section {
+  padding: 6rem 2rem;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-family: var(--font-en);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.section-title {
+  font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.section-desc {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  max-width: 620px;
+  line-height: 1.9;
+  font-weight: 300;
+  margin-bottom: 3rem;
+}
+
+/* ===== PROBLEM ===== */
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.problem-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.problem-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.problem-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-bottom: 1.25rem;
+  background: var(--accent-rose-light);
+}
+
+.problem-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.65rem;
+  line-height: 1.5;
+}
+
+.problem-card p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+/* ===== PERSONA BENEFITS ===== */
+.persona-section {
+  padding: 6rem 2rem;
+  background: var(--bg-secondary);
+}
+
+.persona-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.persona-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.persona-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 2rem 1.75rem;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.persona-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-3px);
+}
+
+.persona-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 18px 18px 0 0;
+}
+
+.persona-card:nth-child(1)::before { background: linear-gradient(90deg, var(--accent), #7B9BF0); }
+.persona-card:nth-child(2)::before { background: linear-gradient(90deg, var(--accent-green), #7BCCA3); }
+.persona-card:nth-child(3)::before { background: linear-gradient(90deg, var(--accent-purple), #B8A3E0); }
+
+.persona-emoji {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.persona-card:nth-child(1) .persona-emoji { background: var(--accent-light); }
+.persona-card:nth-child(2) .persona-emoji { background: var(--accent-green-light); }
+.persona-card:nth-child(3) .persona-emoji { background: var(--accent-purple-light); }
+
+.persona-role {
+  font-family: var(--font-en);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+.persona-card:nth-child(1) .persona-role { color: var(--accent); }
+.persona-card:nth-child(2) .persona-role { color: var(--accent-green); }
+.persona-card:nth-child(3) .persona-role { color: var(--accent-purple); }
+
+.persona-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+
+.persona-card > p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  font-weight: 300;
+  margin-bottom: 1.25rem;
+}
+
+.persona-benefits {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.persona-benefits li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.83rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+.persona-benefits li .benefit-icon {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  font-size: 0.85rem;
+}
+
+.persona-card:nth-child(1) .benefit-icon { color: var(--accent); }
+.persona-card:nth-child(2) .benefit-icon { color: var(--accent-green); }
+.persona-card:nth-child(3) .benefit-icon { color: var(--accent-purple); }
+
+.persona-quote {
+  margin-top: 1.25rem;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.persona-card:nth-child(1) .persona-quote { background: var(--accent-light); }
+.persona-card:nth-child(2) .persona-quote { background: var(--accent-green-light); }
+.persona-card:nth-child(3) .persona-quote { background: var(--accent-purple-light); }
+
+/* ===== CHAT DEMO ===== */
+.solution-section {
+  padding: 6rem 2rem;
+  position: relative;
+}
+
+.solution-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.chat-demo-container {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 3rem;
+  align-items: start;
+  margin-top: 3rem;
+}
+
+.chat-demo-text h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+
+.chat-demo-text p {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.9;
+  font-weight: 300;
+  margin-bottom: 1.75rem;
+}
+
+.feature-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.feature-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.feature-list li::before {
+  content: '✓';
+  color: var(--accent-green);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+/* Chat Window */
+.chat-window {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-secondary);
+}
+
+.chat-header-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  animation: pulse-dot 2s ease infinite;
+}
+
+.chat-header-title {
+  font-family: var(--font-en);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.chat-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  min-height: 400px;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 39px,
+    rgba(0,0,0,0.015) 39px,
+    rgba(0,0,0,0.015) 40px
+  );
+}
+
+.chat-msg {
+  max-width: 88%;
+  padding: 0.8rem 1rem;
+  border-radius: 14px;
+  font-size: 0.82rem;
+  line-height: 1.75;
+  animation: chatIn 0.5s ease both;
+}
+
+.chat-msg.user {
+  align-self: flex-end;
+  background: var(--accent);
+  color: #fff;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0 2px 8px rgba(91, 127, 232, 0.2);
+}
+
+.chat-msg.ai {
+  align-self: flex-start;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  border-bottom-left-radius: 5px;
+}
+
+.chat-msg .msg-label {
+  font-family: var(--font-en);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+  display: block;
+}
+
+.chat-msg.ai .msg-label { color: var(--accent); }
+.chat-msg.user .msg-label { color: rgba(255,255,255,0.7); }
+
+.chat-msg .insight-tag {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  background: var(--accent-amber-light);
+  border: 1px solid rgba(212, 162, 58, 0.2);
+  border-radius: 6px;
+  font-size: 0.7rem;
+  color: var(--accent-amber);
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.chat-msg .action-block {
+  margin-top: 0.65rem;
+  padding: 0.65rem 0.85rem;
+  background: var(--accent-light);
+  border: 1px solid var(--border-accent);
+  border-radius: 10px;
+  font-size: 0.78rem;
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+
+.chat-msg .action-block strong {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.chat-input-mock {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.8rem 1.25rem;
+  border-top: 1px solid var(--border);
+  background: var(--bg-secondary);
+}
+
+.chat-input-mock span {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.chat-input-mock .send-icon {
+  margin-left: auto;
+  width: 30px; height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent);
+  border-radius: 8px;
+  font-size: 0.75rem;
+  color: #fff;
+}
+
+@keyframes chatIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== FEATURES GRID ===== */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-top: 3rem;
+}
+
+.feature-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.feature-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.feature-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-bottom: 1.25rem;
+}
+
+.feature-card:nth-child(1) .feature-icon { background: var(--accent-light); }
+.feature-card:nth-child(2) .feature-icon { background: var(--accent-green-light); }
+.feature-card:nth-child(3) .feature-icon { background: var(--accent-amber-light); }
+.feature-card:nth-child(4) .feature-icon { background: var(--accent-rose-light); }
+.feature-card:nth-child(5) .feature-icon { background: var(--accent-purple-light); }
+.feature-card:nth-child(6) .feature-icon { background: var(--accent-light); }
+
+.feature-card h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.55rem;
+  line-height: 1.5;
+}
+
+.feature-card p {
+  font-size: 0.83rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+/* ===== DAILY FLOW ===== */
+.flow-section {
+  padding: 6rem 2rem;
+  background: var(--bg-secondary);
+}
+
+.flow-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.flow-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 3rem;
+  position: relative;
+}
+
+.flow-container::before {
+  content: '';
+  position: absolute;
+  left: 28px; top: 30px; bottom: 30px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--accent), var(--accent-green), var(--accent-amber));
+  opacity: 0.25;
+}
+
+.flow-step {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  padding: 1.15rem 0;
+}
+
+.flow-dot {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  z-index: 1;
+}
+
+.flow-content h4 {
+  font-size: 0.92rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.flow-content .flow-time {
+  font-family: var(--font-en);
+  font-size: 0.68rem;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.3rem;
+  display: block;
+}
+
+.flow-content p {
+  font-size: 0.83rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* ===== MEDDIC INTRO ===== */
+.meddic-intro {
+  margin-top: 2rem;
+  margin-bottom: 2.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 2rem 2.25rem;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.meddic-intro::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-purple), var(--accent-green));
+}
+
+.meddic-intro-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.85rem;
+  background: var(--accent-light);
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.meddic-intro h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
+}
+
+.meddic-intro > p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.9;
+  font-weight: 300;
+  margin-bottom: 1.25rem;
+}
+
+.meddic-intro-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.meddic-stat {
+  text-align: center;
+}
+
+.meddic-stat .stat-number {
+  font-family: var(--font-en);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.2;
+  display: block;
+}
+
+.meddic-stat .stat-label {
+  font-size: 0.73rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+  line-height: 1.5;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.meddic-intro-note {
+  margin-top: 1.5rem;
+  padding: 0.85rem 1.1rem;
+  background: var(--accent-green-light);
+  border-radius: 10px;
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  line-height: 1.7;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.meddic-intro-note .note-icon {
+  flex-shrink: 0;
+  font-size: 1rem;
+  margin-top: 0.1rem;
+}
+
+/* ===== MEDDIC ===== */
+.meddic-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 3rem;
+}
+
+.meddic-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.meddic-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.meddic-letter {
+  font-family: var(--font-en);
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+
+.meddic-card h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.meddic-card p {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* ===== COMPARISON ===== */
+.comparison-table-wrapper {
+  margin-top: 3rem;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  background: var(--bg-card);
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 0.9rem 1.15rem;
+  text-align: left;
+  font-size: 0.83rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.comparison-table thead th {
+  background: var(--bg-secondary);
+  font-weight: 600;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.02em;
+}
+
+.comparison-table thead th:last-child {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.comparison-table tbody td {
+  color: var(--text-secondary);
+  font-weight: 300;
+}
+
+.comparison-table tbody td:first-child {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.comparison-table tbody td:last-child {
+  color: var(--text-primary);
+  background: rgba(91, 127, 232, 0.03);
+  font-weight: 400;
+}
+
+.comparison-table tbody tr:last-child td { border-bottom: none; }
+
+.check { color: var(--accent-green); font-weight: 600; }
+.cross { color: var(--text-muted); }
+.partial { color: var(--accent-amber); }
+
+/* ===== CTA ===== */
+.cta-section {
+  padding: 7rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  bottom: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 500px;
+  background: radial-gradient(ellipse, rgba(91, 127, 232, 0.05) 0%, rgba(155, 127, 212, 0.03) 40%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-section h2 {
+  font-size: clamp(1.6rem, 4vw, 2.3rem);
+  font-weight: 900;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.cta-section > p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: 2.5rem;
+  font-weight: 300;
+  line-height: 1.9;
+}
+
+.cta-form {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 460px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cta-form input {
+  flex: 1;
+  min-width: 220px;
+  padding: 0.8rem 1.1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-family: var(--font-jp);
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.cta-form input::placeholder { color: var(--text-muted); }
+.cta-form input:focus { border-color: var(--accent); }
+
+.cta-note {
+  margin-top: 0.85rem;
+  font-size: 0.73rem;
+  color: var(--text-muted);
+}
+
+/* ===== FOOTER ===== */
+footer {
+  padding: 2.5rem 2rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  background: var(--bg-secondary);
+}
+
+footer p {
+  font-family: var(--font-en);
+  font-size: 0.73rem;
+  color: var(--text-muted);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  html { font-size: 15px; }
+
+  /* Nav */
+  nav {
+    padding: 0.75rem 1rem;
+  }
+  .nav-logo { font-size: 1rem; gap: 0.4rem; }
+  .nav-logo-icon { width: 28px; height: 28px; font-size: 0.8rem; border-radius: 7px; }
+  .nav-cta { padding: 0.5rem 1rem; font-size: 0.78rem; }
+
+  /* Hero */
+  .hero {
+    padding: 6rem 1.25rem 3rem;
+    min-height: auto;
+  }
+  .hero-badge { font-size: 0.72rem; padding: 0.35rem 0.9rem; margin-bottom: 1.75rem; }
+  .hero h1 { font-size: 1.85rem; margin-bottom: 1rem; }
+  .hero-sub { font-size: 0.9rem; line-height: 1.85; margin-bottom: 2rem; }
+  .hero-actions { flex-direction: column; width: 100%; max-width: 320px; }
+  .btn-primary, .btn-secondary { width: 100%; justify-content: center; padding: 0.85rem 1.5rem; }
+
+  /* Sections */
+  .section { padding: 3.5rem 1.25rem; }
+  .section-title { font-size: 1.35rem; }
+  .section-desc { font-size: 0.88rem; margin-bottom: 2rem; }
+
+  /* Grids → 1 col */
+  .problem-grid,
+  .features-grid,
+  .meddic-grid,
+  .persona-grid,
+  .meddic-intro-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .problem-grid { gap: 1rem; }
+  .features-grid { gap: 1rem; }
+  .persona-grid { gap: 1.25rem; }
+
+  /* Cards */
+  .problem-card { padding: 1.5rem 1.25rem; }
+  .feature-card { padding: 1.5rem 1.25rem; }
+
+  /* Persona */
+  .persona-section { padding: 3.5rem 1.25rem; }
+  .persona-card { padding: 1.75rem 1.5rem; }
+  .persona-emoji { width: 48px; height: 48px; font-size: 1.4rem; border-radius: 14px; }
+  .persona-card h3 { font-size: 1.05rem; }
+
+  /* Chat demo */
+  .chat-demo-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .chat-demo-text h3 { font-size: 1.2rem; }
+  .chat-window { border-radius: 14px; }
+  .chat-body { min-height: auto; padding: 1rem; }
+  .chat-msg { max-width: 92%; font-size: 0.8rem; padding: 0.7rem 0.9rem; }
+  .chat-msg .action-block { font-size: 0.75rem; padding: 0.55rem 0.75rem; }
+  .chat-msg .insight-tag { font-size: 0.68rem; }
+
+  /* Daily flow */
+  .flow-section { padding: 3.5rem 1.25rem; }
+  .flow-dot { width: 46px; height: 46px; font-size: 1rem; border-radius: 12px; }
+  .flow-step { gap: 1rem; }
+  .flow-container::before { left: 23px; }
+  .flow-content h4 { font-size: 0.88rem; }
+  .flow-content p { font-size: 0.8rem; }
+
+  /* MEDDIC intro */
+  .meddic-intro { padding: 1.5rem 1.25rem; border-radius: 14px; }
+  .meddic-intro h3 { font-size: 1.05rem; }
+  .meddic-intro > p { font-size: 0.84rem; }
+  .meddic-intro-stats { gap: 0.75rem; }
+  .meddic-stat .stat-number { font-size: 1.35rem; }
+  .meddic-stat .stat-label { font-size: 0.7rem; }
+  .meddic-intro-note { font-size: 0.78rem; }
+
+  /* MEDDIC grid */
+  .meddic-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+  .meddic-card { padding: 1.15rem; }
+  .meddic-letter { font-size: 1.4rem; }
+  .meddic-card h4 { font-size: 0.8rem; }
+  .meddic-card p { font-size: 0.74rem; }
+
+  /* Comparison table → horizontal scroll */
+  .comparison-table-wrapper {
+    border-radius: 14px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .comparison-table { min-width: 580px; }
+  .comparison-table th,
+  .comparison-table td {
+    padding: 0.65rem 0.7rem;
+    font-size: 0.74rem;
+    white-space: nowrap;
+  }
+
+  /* CTA */
+  .cta-section { padding: 4rem 1.25rem; }
+  .cta-section h2 { font-size: 1.4rem; }
+  .cta-form { flex-direction: column; max-width: 100%; }
+  .cta-form input { min-width: auto; width: 100%; }
+  .cta-form .btn-primary { width: 100%; justify-content: center; }
+
+  /* Footer */
+  footer { padding: 2rem 1.25rem; }
+}
+
+/* Extra small screens */
+@media (max-width: 400px) {
+  html { font-size: 14px; }
+  .hero h1 { font-size: 1.65rem; }
+  .meddic-grid { grid-template-columns: 1fr; }
+  .meddic-intro-stats { grid-template-columns: 1fr; gap: 1rem; }
+  .meddic-stat { text-align: left; display: flex; align-items: center; gap: 0.75rem; }
+  .meddic-stat .stat-number { font-size: 1.2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">💬</div>
+    営業相談AI
+  </div>
+  <a href="#waitlist" class="nav-cta">早期アクセスに登録 →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Coming Soon — 事前登録受付中</div>
+  <h1>営業をもっと楽しく、<br><span class="highlight">カンタンに。</span></h1>
+  <p class="hero-sub">
+    商談メモを共有するだけ。<br>
+    AIがあなたの営業チームの「最強の相談相手」になります。<br>
+    みんなでAIと考える、チャット式CRM。
+  </p>
+  <div class="hero-actions">
+    <a href="#waitlist" class="btn-primary">早期アクセスに登録 →</a>
+    <a href="#features" class="btn-secondary">機能を見る</a>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="section animate-on-scroll">
+  <div class="section-label">Problem</div>
+  <h2 class="section-title">営業チームの「本当の課題」</h2>
+  <p class="section-desc">CRMは本来、売上を伸ばすためのツール。なのに現実は、入力作業と報告業務に追われ、肝心の顧客と向き合う時間が奪われています。</p>
+
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="problem-icon">⏰</div>
+      <h3>顧客に向き合う時間がない</h3>
+      <p>CRMへの入力、日報作成、週次報告。管理業務に追われて、提案準備や顧客理解に時間を割けない。営業担当者もマネージャーも疲弊しています。</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">🔀</div>
+      <h3>チームの足並みが揃わない</h3>
+      <p>営業・CS・サポートで顧客情報が分断。職位や職務が違うと、顧客への提案や対応方法がまとまらず、組織としての営業力が属人化したまま。</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">📊</div>
+      <h3>営業状況が見えない</h3>
+      <p>経営者が知りたいのは「今期の着地見込み」。でもフォーキャストは担当者の感覚頼み。正確な予測ができず、意思決定が遅れます。</p>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONA BENEFITS -->
+<section class="persona-section animate-on-scroll">
+  <div class="persona-inner">
+    <div class="section-label">Benefits</div>
+    <h2 class="section-title">あなたの役割に合わせて、<br>AIがサポートします。</h2>
+    <p class="section-desc">営業担当者、営業部長、経営者。それぞれが抱える課題に、営業相談AIは異なる価値を届けます。</p>
+
+    <div class="persona-grid">
+      <!-- IC -->
+      <div class="persona-card">
+        <div class="persona-emoji">🎯</div>
+        <div class="persona-role">For Sales Rep</div>
+        <h3>営業担当者</h3>
+        <p>報告・入力業務から解放され、お客様と向き合う時間を最大化。AIが「次に何をすべきか」を一緒に考えてくれます。</p>
+        <ul class="persona-benefits">
+          <li><span class="benefit-icon">✦</span>チャットで報告するだけ。CRM入力・日報作成はAIにおまかせ</li>
+          <li><span class="benefit-icon">✦</span>商談後に「次は何を聞くべきか」「誰を巻き込むべきか」をAIが具体的に提案</li>
+          <li><span class="benefit-icon">✦</span>MEDDICの抜け漏れをリアルタイムで指摘。ベテランの視点が常に隣にいる感覚</li>
+          <li><span class="benefit-icon">✦</span>朝のブリーフィングで今日やるべきことが明確に</li>
+        </ul>
+        <div class="persona-quote">
+          「報告書を書く時間がなくなって、もう1件お客様を訪問できるようになった。」
+        </div>
+      </div>
+
+      <!-- Manager -->
+      <div class="persona-card">
+        <div class="persona-emoji">📋</div>
+        <div class="persona-role">For Sales Manager</div>
+        <h3>営業部長・マネージャー</h3>
+        <p>パイプラインレビューとメンバー育成に費やす時間を大幅削減。AIが案件の状況を常時把握し、必要な情報を届けます。</p>
+        <ul class="persona-benefits">
+          <li><span class="benefit-icon">✦</span>全案件のMEDDIC充足状況が一目でわかるダッシュボード</li>
+          <li><span class="benefit-icon">✦</span>リスクのある案件をAIが自動検知。対処すべきポイントを提示</li>
+          <li><span class="benefit-icon">✦</span>メンバーへのコーチングポイントをAIが整理。1on1の質が上がる</li>
+          <li><span class="benefit-icon">✦</span>管理業務が減り、自身も顧客訪問やチーム戦略に時間を使える</li>
+        </ul>
+        <div class="persona-quote">
+          「週2時間のパイプラインレビュー準備が不要になった。その分、重要案件に同行できている。」
+        </div>
+      </div>
+
+      <!-- Executive -->
+      <div class="persona-card">
+        <div class="persona-emoji">📈</div>
+        <div class="persona-role">For Executive</div>
+        <h3>経営者・VP</h3>
+        <p>マネージャーを介さず、営業の実態をリアルタイムに把握。感覚ではなくデータに基づいた経営判断ができます。</p>
+        <ul class="persona-benefits">
+          <li><span class="benefit-icon">✦</span>AIフォーキャスティングで今期の着地見込みをリアルタイム表示</li>
+          <li><span class="benefit-icon">✦</span>各案件のMEDDIC充足率から、パイプラインの質を客観評価</li>
+          <li><span class="benefit-icon">✦</span>営業プロセスの属人化を解消し、組織としてスケールできる基盤に</li>
+          <li><span class="benefit-icon">✦</span>マネージャー不在でも営業組織が回る仕組みを構築</li>
+        </ul>
+        <div class="persona-quote">
+          「フォーキャストの精度が上がり、採用計画や投資判断を自信を持って進められるようになった。」
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION: CHAT DEMO -->
+<section class="solution-section" id="features">
+  <div class="solution-inner animate-on-scroll">
+    <div class="section-label">Solution</div>
+    <h2 class="section-title">AIと会話するだけで、<br>営業が前に進む。</h2>
+    <p class="section-desc">フィールドを埋める作業はもう不要。商談の内容をチャットで共有するだけで、AIが状況を分析し、次のアクションを一緒に考えます。</p>
+
+    <div class="chat-demo-container">
+      <div class="chat-demo-text">
+        <h3>チャット式CRMという<br>新しい体験</h3>
+        <p>商談後にチャットで報告するだけ。AIがMEDDICフレームワークに沿って案件を自動分析し、足りない情報や次にやるべきことを一緒に考えてくれます。</p>
+        <ul class="feature-list">
+          <li>商談メモをチャットで投入 → AIが自動で構造化</li>
+          <li>MEDDICの各項目の充足状況をリアルタイム表示</li>
+          <li>「次に何をすべきか」を具体的なアクションで提示</li>
+          <li>日報は自動生成。レビューして送信するだけ</li>
+        </ul>
+      </div>
+
+      <div class="chat-window">
+        <div class="chat-header">
+          <div class="chat-header-dot"></div>
+          <span class="chat-header-title">営業相談AI — 株式会社ABC 案件</span>
+        </div>
+        <div class="chat-body">
+          <div class="chat-msg user" style="animation-delay: 0.2s">
+            <span class="msg-label">You</span>
+            今日ABC社の田中部長と商談してきた。現場の生産性課題は深刻で、導入意欲は高い。ただ予算取りは来期になりそう。競合はSalesforce。次回は2週間後にデモの予定。
+          </div>
+          <div class="chat-msg ai" style="animation-delay: 0.6s">
+            <span class="msg-label">営業相談AI</span>
+            商談内容を記録しました。MEDDIC分析の結果、2点確認が必要です。
+            <div class="action-block">
+              <strong>① Economic Buyer 未特定</strong><br>
+              田中部長は現場責任者ですが、予算承認者は誰でしょうか？次回デモに決裁者の同席を打診してみてください。<br><br>
+              <strong>② Decision Criteria 未確認</strong><br>
+              Salesforceと比較検討中とのことですが、選定基準は把握できていますか？次回のヒアリング項目に追加しました。
+            </div>
+            <span class="insight-tag">⚠ MEDDIC充足率 50% — 要アクション</span>
+          </div>
+          <div class="chat-msg user" style="animation-delay: 1.0s">
+            <span class="msg-label">You</span>
+            なるほど。決裁者は鈴木取締役らしい。デモに呼べるか聞いてみる。
+          </div>
+          <div class="chat-msg ai" style="animation-delay: 1.4s">
+            <span class="msg-label">営業相談AI</span>
+            EBを鈴木取締役に更新しました 👍 デモ同席を依頼するメール案を作成しますか？
+          </div>
+        </div>
+        <div class="chat-input-mock">
+          <span>商談メモを入力...</span>
+          <div class="send-icon">↑</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES GRID -->
+<section class="section animate-on-scroll" id="how">
+  <div class="section-label">Features</div>
+  <h2 class="section-title">管理業務はAIに。<br>あなたは顧客との時間に。</h2>
+  <p class="section-desc">パイプラインレビュー、案件コーチング、フォーキャスティング。管理業務をAIに任せて、顧客との関係構築に集中してください。</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">💬</div>
+      <h3>チャット式データ入力</h3>
+      <p>フォームを埋める時代は終わり。商談内容をチャットで共有するだけで、AIが案件情報を自動構造化します。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <h3>MEDDIC自動分析</h3>
+      <p>会話ログからMEDDICの各要素を自動抽出・評価。足りない情報を指摘し、具体的な質問リストを提案します。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📋</div>
+      <h3>日報自動生成</h3>
+      <p>その日の活動を自動で日報にまとめます。レビューして送信ボタンを押すだけ。毎日の報告作業から解放されます。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>リスク自動検知</h3>
+      <p>案件の停滞、競合の台頭、キーパーソンの離脱。危険な兆候をAIが監視し、対処が必要な時にお知らせします。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📈</div>
+      <h3>AIフォーキャスティング</h3>
+      <p>MEDDIC充足率とやりとりの内容からAIが着地予測。感覚ではなくデータに基づいた数字を把握できます。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">👥</div>
+      <h3>チーム横断の顧客理解</h3>
+      <p>営業・CS・サポートの全員が同じ顧客コンテキストを共有。担当者が変わっても、顧客体験が途切れません。</p>
+    </div>
+  </div>
+</section>
+
+<!-- DAILY FLOW -->
+<section class="flow-section animate-on-scroll">
+  <div class="flow-inner">
+    <div class="section-label">Daily Flow</div>
+    <h2 class="section-title">営業担当者の1日が変わる</h2>
+    <p class="section-desc">営業相談AIがある1日。入力や報告に追われることなく、顧客との対話と提案活動に集中できます。</p>
+
+    <div class="flow-container">
+      <div class="flow-step">
+        <div class="flow-dot">☀️</div>
+        <div class="flow-content">
+          <span class="flow-time">08:30 — Morning Brief</span>
+          <h4>AIが今日のブリーフィングを表示</h4>
+          <p>今日の商談予定、注意すべき案件のリスク、フォローが必要な顧客。朝イチで営業のTo Doが明確に。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot">🎯</div>
+        <div class="flow-content">
+          <span class="flow-time">09:30 — Pre-Meeting</span>
+          <h4>商談のゴールと質問リストを確認</h4>
+          <p>過去のやりとりを踏まえて、この商談で確認すべきことをAIが提示。上司のコメントもここで確認。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot">🤝</div>
+        <div class="flow-content">
+          <span class="flow-time">10:00 — Meeting</span>
+          <h4>商談に集中する</h4>
+          <p>録音・メモは最小限でOK。あなたの仕事は顧客の話を聴き、価値を伝えること。記録はAIに任せて。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot">💬</div>
+        <div class="flow-content">
+          <span class="flow-time">11:00 — Post-Meeting</span>
+          <h4>チャットで商談内容を共有</h4>
+          <p>「こういう話をした」とチャットに入力。AIが分析し、次のアクションとリスクを一緒に整理します。</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-dot">📝</div>
+        <div class="flow-content">
+          <span class="flow-time">17:30 — Daily Report</span>
+          <h4>日報はレビューして送信するだけ</h4>
+          <p>AIが1日の活動をまとめた日報を作成。確認してボタンを押すだけ。翌日のTo Doも自動設定されます。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEDDIC -->
+<section class="section animate-on-scroll">
+  <div class="section-label">Methodology</div>
+  <h2 class="section-title">世界のトップ営業組織が使う<br>「勝ちパターン」を、あなたのチームに。</h2>
+  <p class="section-desc">営業相談AIは、海外のB2B営業で広く採用されている「MEDDIC」というフレームワークをベースにしています。</p>
+
+  <div class="meddic-intro">
+    <div class="meddic-intro-badge">🌍 MEDDICとは？</div>
+    <h3>世界のB2B企業が実践する「案件を勝ち取るためのチェックリスト」</h3>
+    <p>MEDDICは、Salesforce、Google、Microsoft、SAPなど、世界トップクラスのB2B企業の営業チームで標準的に使われている営業フレームワークです。「この案件は本当に受注できるのか？」を6つの観点から客観的に評価し、勝率を高めるための方法論として、1990年代に米国で生まれました。</p>
+    <p>日本では外資系IT企業を中心に導入が進んでいますが、多くの営業チームではまだ馴染みがありません。しかし、MEDDICの考え方自体はとてもシンプル。「決裁者は誰か」「予算はあるか」「選定基準は何か」——優秀な営業パーソンが無意識にやっていることを、チーム全員が再現できるように仕組み化したものです。</p>
+
+    <div class="meddic-intro-stats">
+      <div class="meddic-stat">
+        <span class="stat-number">6つ</span>
+        <span class="stat-label">確認すべき観点<br>（覚えることはこれだけ）</span>
+      </div>
+      <div class="meddic-stat">
+        <span class="stat-number">Top 100</span>
+        <span class="stat-label">世界のB2B SaaS企業の<br>大多数が採用</span>
+      </div>
+      <div class="meddic-stat">
+        <span class="stat-number">AI対応</span>
+        <span class="stat-label">営業相談AIが自動で<br>分析・ガイド</span>
+      </div>
+    </div>
+
+    <div class="meddic-intro-note">
+      <span class="note-icon">💡</span>
+      <span>MEDDICを知らなくても大丈夫です。営業相談AIが商談内容をもとに「次に確認すべきこと」を具体的に教えてくれるので、使っているうちに自然とベストプラクティスが身につきます。</span>
+    </div>
+  </div>
+
+  <div class="meddic-grid">
+    <div class="meddic-card">
+      <div class="meddic-letter">M</div>
+      <h4>Metrics — 成果指標</h4>
+      <p>顧客が達成したい定量的な成果。「この商品を導入したら、何がどのくらい良くなるのか？」をAIが一緒に整理します。</p>
+    </div>
+    <div class="meddic-card">
+      <div class="meddic-letter">E</div>
+      <h4>Economic Buyer — 決裁者</h4>
+      <p>最終的にお金を出す決裁者は誰か。「この人にOKをもらえれば受注できる」というキーパーソンの特定を支援します。</p>
+    </div>
+    <div class="meddic-card">
+      <div class="meddic-letter">D</div>
+      <h4>Decision Criteria — 選定基準</h4>
+      <p>お客様が何を基準に選ぶのか。価格？機能？サポート？競合と比べてどこで勝負するかを明確にします。</p>
+    </div>
+    <div class="meddic-card">
+      <div class="meddic-letter">D</div>
+      <h4>Decision Process — 意思決定プロセス</h4>
+      <p>稟議はどう通る？誰の承認が必要？いつまでに決まる？クロージングまでの道筋を可視化します。</p>
+    </div>
+    <div class="meddic-card">
+      <div class="meddic-letter">I</div>
+      <h4>Identify Pain — 課題の特定</h4>
+      <p>お客様の「本当の困りごと」を深掘り。表面的なニーズの裏にある本質的な痛みをAIと一緒に探ります。</p>
+    </div>
+    <div class="meddic-card">
+      <div class="meddic-letter">C</div>
+      <h4>Champion — 社内推進者</h4>
+      <p>お客様の社内で味方になってくれる人は誰か。その人をどう巻き込み、社内を動かしてもらうかを一緒に考えます。</p>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="section animate-on-scroll">
+  <div class="section-label">Comparison</div>
+  <h2 class="section-title">既存ツールとの違い</h2>
+  <p class="section-desc">営業相談AIは従来のCRM/SFAとは根本的に異なるアプローチを取ります。</p>
+
+  <div class="comparison-table-wrapper">
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>機能</th>
+          <th>従来のCRM</th>
+          <th>商談解析ツール</th>
+          <th>営業相談AI ✨</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>データ入力方法</td>
+          <td class="cross">フォームに手動入力</td>
+          <td class="partial">録音から自動文字起こし</td>
+          <td class="check">チャットで会話するだけ</td>
+        </tr>
+        <tr>
+          <td>メソドロジー対応</td>
+          <td class="cross">なし（手動で運用）</td>
+          <td class="cross">なし</td>
+          <td class="check">MEDDIC自動分析・コーチング</td>
+        </tr>
+        <tr>
+          <td>次のアクション提案</td>
+          <td class="cross">なし</td>
+          <td class="partial">トーク改善の示唆</td>
+          <td class="check">具体的な質問・メール文面を提示</td>
+        </tr>
+        <tr>
+          <td>フォーキャスティング</td>
+          <td class="partial">担当者の感覚ベース</td>
+          <td class="cross">対象外</td>
+          <td class="check">MEDDIC充足率ベースのAI予測</td>
+        </tr>
+        <tr>
+          <td>日報・レポート</td>
+          <td class="cross">手動作成</td>
+          <td class="cross">対象外</td>
+          <td class="check">AI自動生成 → レビューのみ</td>
+        </tr>
+        <tr>
+          <td>マネージャー負荷</td>
+          <td class="cross">パイプラインレビューが重い</td>
+          <td class="partial">商談確認は効率化</td>
+          <td class="check">管理業務の大半をAIが代替</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section animate-on-scroll" id="waitlist">
+  <h2>まずは、試してみませんか？</h2>
+  <p>現在、早期アクセスの事前登録を受け付けています。<br>登録いただいた方には、優先的にベータ版をご案内します。</p>
+  <div class="cta-form">
+    <input type="email" placeholder="メールアドレスを入力">
+    <button class="btn-primary" onclick="alert('ご登録ありがとうございます！\nベータ版のご案内をお送りします。')">登録する →</button>
+  </div>
+  <p class="cta-note">※ スパムは送りません。ベータ版のご案内のみお送りします。</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 営業相談AI — Built with passion for sales teams.</p>
+</footer>
+
+<!-- Scroll Animation -->
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
